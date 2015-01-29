@@ -14,15 +14,32 @@ class ViewController: UIViewController
     // properties
     @IBOutlet weak var display: UILabel!
     var userIsInTheMiddleOfTypingANumber = false
+    var numberHasADecimal = false
     var operandStack = Array<Double>()
 
     // append digit touched to display
+    // Handle pressing of any of the digit buttons (0-9) and the decimal button (.).
+    // Allows only a single decimal per number, allows for leading decimal.
     @IBAction func appendDigit(sender: UIButton) {
         let digit = sender.currentTitle!
+        
         if userIsInTheMiddleOfTypingANumber {
+            if digit == "." {
+                if numberHasADecimal {
+                    return
+                } else {
+                    numberHasADecimal = true
+                }
+            }
             display.text = display.text! + digit
         } else {
-            display.text = digit
+            if digit == "." {
+                display.text = "0."
+                numberHasADecimal = true
+            } else {
+                display.text = digit
+            }
+            
             userIsInTheMiddleOfTypingANumber = true
         }
     }
