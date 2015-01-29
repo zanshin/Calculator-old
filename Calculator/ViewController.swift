@@ -47,6 +47,7 @@ class ViewController: UIViewController
     // add number entered to the operandStack
     @IBAction func enter() {
         userIsInTheMiddleOfTypingANumber = false
+        numberHasADecimal = false
         operandStack.append(displayValue)
         println("operandStack = \(operandStack)")
     }
@@ -59,6 +60,7 @@ class ViewController: UIViewController
         set {
             display.text = "\(newValue)"
             userIsInTheMiddleOfTypingANumber = false
+            numberHasADecimal = false
         }
     }
     
@@ -76,6 +78,9 @@ class ViewController: UIViewController
             case "+": performOperation { $0 + $1 }
             case "−": performOperation { $1 - $0 }
             case "√": performOperation { sqrt($0) }
+            case "sin": performOperation { sin($0) }
+            case "cos": performOperation { cos($0) }
+            case "π": performOperation()
             default: break
             
         }
@@ -96,6 +101,13 @@ class ViewController: UIViewController
             displayValue = operation(operandStack.removeLast())
             enter()
         }
+    }
+    
+    //override for 0 operand operations. i.e., π
+    func performOperation() -> Double {
+        displayValue = M_PI
+        enter()
+        return displayValue
     }
     
     
